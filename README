@@ -1,0 +1,30 @@
+A* search for Lua, written for pathfinding maps in the LOVE2D game engine.
+
+http://love2d.org/
+
+AStar_optimizied.love is a .love file used to demo the A* search. LOVE 2D
+is required to view.
+
+The library, instructions for use, license information, and the required
+binary heap library are located in the lib directory.
+
+
+CONTROLS FOR THE VISUAL DEMO:
+
+MOUSE:
+	Left-click:			places the start node (green rectangle)
+	SHIFT+Left-click:	places a wall
+	Right-click:		places the end node (red rectangle)
+
+KEYBOARD:
+	W:		toggles the drawing of the walls
+	M:		toggles the ability to change the map (which stops the calls
+			to flattenMap(), to show the speed of A*)
+	TAB:	calls A* once
+	F2:		resets the program
+	P:		toggles the stress test
+	[:		Decreases the number of consecutive calls to A* during
+			the stress test (clamped at 1)
+	]:		Increases the number of consecutive calls to A* during
+			the stress test
+	ESC:	Quits the program

@@ -14,7 +14,6 @@ binary_heap = require "binary_heap"
 -- @param openSet:		the open set
 -- @param closedSet:	the closed set
 local function cleanPathMap(pathMap, openSet, closedSet)
-	cleanUpStart = love.timer.getTime()	--			<== FOR STRESS TEST
 	for _,v in pairs(openSet) do
 		if type(v) == "table" then
 			pathMap[v.value.pathLoc].open = false
@@ -23,7 +22,6 @@ local function cleanPathMap(pathMap, openSet, closedSet)
 	for _,v in pairs(closedSet) do
 		pathMap[v.pathLoc].closed = false
 	end
-	cleanUpEnd = love.timer.getTime()	--			<== FOR STRESS TEST
 end
 
 --- Constructs the found path. This works in reverse from the 
@@ -34,13 +32,10 @@ end
 -- @param startPos:		the position of the start node
 -- #returns path:	the found path
 local function buildPath(closedSet, startPos)
-	buildPathStart = love.timer.getTime()	--		<== FOR STRESS TEST
 	local path = {closedSet[#closedSet]}
 	while path[#path].pathLoc ~= startPos do
 		table.insert(path, closedSet[path[#path].pCloseLoc])
 	end
-	buildPathEnd = love.timer.getTime()	--			<== FOR STRESS TEST
-	aStarEnd = love.timer.getTime()	--				<== FOR STRESS TEST
 	return path
 end
 
@@ -52,7 +47,6 @@ end
 -- @param exitPos:	the exit node's position, relative to the pathMap
 -- #returns path:	the found path (or empty if it failed to find a path)
 function startPathing(pathMap, startPos, exitPos)
-	aStarStart = love.timer.getTime()	-- 			<== FOR STRESS TEST
 	pathMap[startPos].parent = pathMap[startPos]
 	-- Initialize the gScore and fScore of the start node
 	pathMap[startPos].gScore = 0
@@ -67,28 +61,22 @@ function startPathing(pathMap, startPos, exitPos)
 	local closedSet = {}
 	local testNode = {}
 	
-	mainLoopStart = love.timer.getTime()	--		<== FOR STRESS TEST
-	
 	-- The main loop for the algorithm. Will continue to check as long as
 	-- there are open nodes that haven't been checked.
 	while #openSet > 0 do
 		-- Find the next node with the best fScore
-		findNextStart = love.timer.getTime()	--		<== FOR STRESS TEST
 		_, testNode = openSet:pop()
-		findNextEnd = love.timer.getTime()	--			<== FOR STRESS TEST
 		pathMap[testNode.pathLoc].open = false
 		-- Add that node to the closed set
 		pathMap[testNode.pathLoc].closed = true
 		table.insert(closedSet, testNode)
 		-- Check to see if that is the exit node's position
 		if closedSet[#closedSet].pathLoc == exitPos then
-			mainLoopEnd = love.timer.getTime()	--	<== FOR STRESS TEST
 			-- Clean the path map
 			cleanPathMap(pathMap, openSet, closedSet)
 			-- Return the build path
 			return buildPath(closedSet, startPos)
 		end
-		neighborStart = love.timer.getTime()	--	<== FOR STRESS TEST
 		
 		-- Check all the (pre-assigned) neighbors. If they are not closed 
 		-- already, then check to see if they are either not on the open
@@ -117,7 +105,6 @@ function startPathing(pathMap, startPos, exitPos)
 				end
 			end
 		end
-		neighborEnd = love.timer.getTime()	--		<== For STRESS TEST
 	end
 	-- Returns an empty table if it failed to find any path to the exit node
 	return {}
