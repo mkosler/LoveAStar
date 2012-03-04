@@ -27,8 +27,11 @@
 --				the stress test
 --		ESC:	Quits the program
 
+require "tserial"
 require "flatten"
-AStar = love.thread.newThread("AStar", "astar")
+AStar = love.thread.newThread("AStar", "astar.lua")
+for k,v in pairs(love.thread.getThreads()) do print(k,v) end
+AStar:start()
 
 colors = {
 	red = {255,0,0},
@@ -119,16 +122,23 @@ function love.update(dt)
 			if not mouseFreeze then
 				pathMap = flattenMap(wallMap, exitGridPos, pathMap)
 			end
+			AStar:send("start pathfinding", TSerial.pack(
+			{
+				pathMap,
+				((startGridPos.r - 1) * NUMBERROWS) + startGridPos.c,
+				((exitGridPos.r - 1) * NUMBERROWS) + exitGridPos.c,
+			}))
 			currentPath = startPathing(
 				pathMap,
 				((startGridPos.r - 1) * NUMBERROWS) + startGridPos.c,
 				((exitGridPos.r - 1) * NUMBERROWS) + exitGridPos.c)
 		end
-		if next(currentPath) ~= nil then
-			pathTrigger = true
-		else
-			pathTrigger = false
-		end
+	end
+	-- local value
+	if next(currentPath) ~= nil then
+		pathTrigger = true
+	else
+		pathTrigger = false
 	end
 end
 
@@ -346,23 +356,18 @@ function love.keypressed(k)
 		if startGridPos.r == -1 or exitGridPos.r == -1 then
 			return
 		end
-			tabTrigger = true
-			pathMap = flattenMap(wallMap, exitGridPos, pathMap)
-		currentPath = AStar:send(
-			{
-				pathMap = pathMap,
-				startNode = ((startGridPos.r - 1) * NUMBERROWS) + startGridPos.c,
-				endNode = ((exitGridPos.r - 1) * NUMBERROWS) + exitGridPos.c,
-			}, parseMessage(name))
+		tabTrigger = true
+		pathMap = flattenMap(wallMap, exitGridPos, pathMap)
+		AStar:send("start pathfinding", TSerial.pack(
+		{
+			pathMap,
+			((startGridPos.r - 1) * NUMBERROWS) + startGridPos.c,
+			((exitGridPos.r - 1) * NUMBERROWS) + exitGridPos.c,
+		}))
 		-- currentPath = startPathing(
 			-- pathMap,
 			-- ((startGridPos.r - 1) * NUMBERROWS) + startGridPos.c,
 			-- ((exitGridPos.r - 1) * NUMBERROWS) + exitGridPos.c)
-		if next(currentPath) ~= nil then
-			pathTrigger = true
-		else
-			pathTrigger = false
-		end
 	end
 	if k == "f2" then
 		love.load()

@@ -1,4 +1,3 @@
-require "tserial"
 
 -- This is a lifted implementation of A* search, written in Lua. This
 -- version has a few variables designed for stress testing, so THIS
@@ -8,6 +7,39 @@ require "tserial"
 --			INSERT URL
 
 binary_heap = require "binary_heap"
+
+-- =====================================================================
+-- THREAD STUFF
+-- =====================================================================
+require "tserial"
+require "love"
+require "love.thread"
+require "love.timer"
+
+AStar = love.thread.getThread()
+main = love.thread.getThread("main")
+
+function love.update(dt)
+-- print("Before main:demand()")
+-- value = main:demand("start pathfinding")
+-- print("After main:demand()")
+	print("Before main:receive()")
+	value = main:receive("start pathfinding")
+	print("after main:receive()")
+	if type(value) == "string" then value = TSerial.unpack(value) end
+	print("After unpacking string")
+	if value then
+		print("After checking the validity of value")
+		possiblePath = startPathing(value[1], value[2], value[3])
+		print("After found path")
+		AStar:send("possible path", TSerial.pack(possiblePath))
+		print("After sending message")
+	end
+end
+
+-- =====================================================================
+-- END THREAD STUFF
+-- =====================================================================
 
 --- Toggle off the pathMap toggles to set up for the next call
 -- @param pathMap:		the flattened path map
@@ -51,7 +83,7 @@ end
 -- @param startPos:	the start node's position, relative to the pathMap
 -- @param exitPos:	the exit node's position, relative to the pathMap
 -- #returns path:	the found path (or empty if it failed to find a path)
-local function startPathing(pathMap, startPos, exitPos)
+function startPathing(pathMap, startPos, exitPos)
 	aStarStart = love.timer.getTime()	-- 			<== FOR STRESS TEST
 	pathMap[startPos].parent = pathMap[startPos]
 	-- Initialize the gScore and fScore of the start node
@@ -121,11 +153,6 @@ local function startPathing(pathMap, startPos, exitPos)
 	end
 	-- Returns an empty table if it failed to find any path to the exit node
 	return {}
-end
-
-function parseMessage(str)
-	local t = TSerial.unpack(str)
-	return startPathing(t.pathMap, t.startNode, t.endNode)
 end
 
 --======================================================================
