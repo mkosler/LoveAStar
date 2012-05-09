@@ -1,0 +1,29 @@
+My method for A* pushes everything into a one dimensional table
+(referred to as an array within the rest of the article),
+for better traversal through it when needing to check for a few triggers.
+A* was initially designed for an arbitrary data structure, so I tried
+to stick with that philosophy as much as possible.
+
+However, because of that philosophy, you will need to deform your map
+into the one dimension array, with a few requirements for what each of the
+array nodes will need. Included in A* is a helper constructor for the nodes
+of the array. It requires four things:
+
+	+ Its own array location
+	+ Its heuristic score (hScore) (the demo uses taxicab heuristics)
+	+ The array location of its neighbor nodes (packaged inside a table)
+	+ The distance to the neighbors (this will be relative to the type
+	  of map that you use) (packaged inside a table)
+
+The helper node constructor should throw an error if any of its parameters
+are wrong.
+
+The demo flattenMap() function is not optimized, as its simply for demo
+purposes only. It will flatten a square map, and give the correct
+heuristics and everything, but it recreates the flattened array every time
+it is called, which causes significant slowdown when you need to change
+the array. Some tips for better flattenMap() functions, as well as
+more information about using my A* search, or A* in general,
+can be found at:
+
+	http://love2d.org/forums/viewtopic.php?f=5&t=7174
