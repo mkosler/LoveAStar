@@ -1,11 +1,5 @@
 
-
--- This is a lifted implementation of A* search, written in Lua. This
--- version has a few variables designed for stress testing, so THIS
--- VERSION SHOULD NOT BE USED OUTSIDE OF THIS DEMO. Please use the
--- version included in the lib directory of the .zip file, or
--- download another copy @:
---			INSERT URL
+-- Use this version in any projects you want to use LoveAStar in.
 
 binary_heap = require "binary_heap"
 
