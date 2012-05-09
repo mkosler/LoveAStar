@@ -2,11 +2,9 @@ A* search for Lua, written for pathfinding maps in the LOVE2D game engine.
 
 http://love2d.org/
 
-AStar_optimizied.love is a .love file used to demo the A* search. LOVE 2D
-is required to view.
+You can find the demo in the Downloads link in this repository.
 
-The library, instructions for use, license information, and the required
-binary heap library are located in the lib directory.
+Use astar_good.lua for any projects you wish to use LoveAStar in.
 
 
 CONTROLS FOR THE VISUAL DEMO:
