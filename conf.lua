@@ -2,7 +2,7 @@ function love.conf(t)
 	t.title = "AStarDemo"
     t.author = "MarekkPie"
     t.identity = nil
-    t.version = "0.8.0"
+    t.version = "0.9.1"
     t.console = false
     t.screen.width = 800
     t.screen.height = 800
