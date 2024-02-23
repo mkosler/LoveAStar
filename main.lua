@@ -299,7 +299,7 @@ function love.mousepressed(x,y,b)
 	local gr, gc = findGridPosition(x, y, wallMap, NODEWIDTH, NODEHEIGHT)
 	if gr ~= -1 then
 		if love.keyboard.isDown("rshift", "lshift") then
-			if b == "l" then
+			if b == 1 then
 				if 	not (gc == startGridPos.c and gr == startGridPos.r) and
 					not (gc == exitGridPos.c and gr == exitGridPos.r) then
 					if wallMap[gr][gc].wall then
@@ -311,11 +311,11 @@ function love.mousepressed(x,y,b)
 			end
 		else
 			if not wallMap[gr][gc].wall then
-				if 	b == "l" and 
+				if 	b == 1 and 
 					not (gc == exitGridPos.c and gr == exitGridPos.r) then
 					startGridPos.c = gc
 					startGridPos.r = gr
-				elseif 	b == "r" and
+				elseif 	b == 2 and
 						not (gc == startGridPos.c and gr == startGridPos.r) then
 					exitGridPos.c = gc
 					exitGridPos.r = gr
